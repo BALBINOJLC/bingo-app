@@ -1,0 +1,160 @@
+{
+  "version": "v1",
+  "baseUrl": "http://localhost:3025/api/v1",
+  "endpoints": {
+    "auth": {
+      "register": {
+        "method": "POST",
+        "url": "http://localhost:3025/api/v1/auth/register",
+        "description": "Registro de nuevos usuarios",
+        "body": {
+          "email": "string",
+          "password": "string",
+          "first_name": "string",
+          "last_name": "string",
+          "dni": "string",
+          "role": "CLIENT"
+        },
+        "response": {
+          "user": {
+            "id": "string",
+            "email": "string",
+            "display_name": "string",
+            "user_name": "string",
+            "first_name": "string",
+            "last_name": "string",
+            "dni": "string",
+            "role": "string",
+            "email_verify": "boolean",
+            "is_active": "boolean"
+          }
+        }
+      },
+      "login": {
+        "method": "POST",
+        "url": "http://localhost:3025/api/v1/auth/login",
+        "description": "Inicio de sesión de usuarios",
+        "headers": {
+          "Authorization": "Basic base64(email:password)"
+        },
+        "response": {
+          "user": {
+            "id": "string",
+            "email": "string",
+            "display_name": "string",
+            "role": "string"
+          },
+          "access_token": "string"
+        }
+      },
+      "verify-email": {
+        "method": "GET",
+        "url": "http://localhost:3025/api/v1/auth/verify-email/:token",
+        "description": "Verificación de email de usuario"
+      }
+    },
+    "bingo": {
+      "events": {
+        "create": {
+          "method": "POST",
+          "url": "http://localhost:3025/api/v1/bingo",
+          "description": "Crear nuevo evento de bingo (Solo Super Admin)",
+          "body": {
+            "name": "string",
+            "description": "string",
+            "start_date": "string",
+            "end_date": "string",
+            "time_start": "string",
+            "time_end": "string",
+            "status": "DRAFT",
+            "prize_pool": "number",
+            "commission": "number",
+            "total_cartons": "number"
+          }
+        },
+        "list": {
+          "method": "GET",
+          "url": "http://localhost:3025/api/v1/bingo",
+          "description": "Listar eventos de bingo",
+          "query": {
+            "search": "string?",
+            "status": "string?",
+            "user_id": "string?"
+          }
+        },
+        "get": {
+          "method": "GET",
+          "url": "http://localhost:3025/api/v1/bingo/:id",
+          "description": "Obtener detalle de un evento"
+        },
+        "update-status": {
+          "method": "PATCH",
+          "url": "http://localhost:3025/api/v1/bingo/:id/status",
+          "description": "Actualizar estado del evento",
+          "body": {
+            "status": "DRAFT | ACTIVE | FINISHED | CANCELLED"
+          }
+        }
+      },
+      "cartons": {
+        "available": {
+          "method": "GET",
+          "url": "http://localhost:3025/api/v1/bingo/events/:eventId/cartons/available",
+          "description": "Obtener cartones disponibles de un evento"
+        },
+        "purchase": {
+          "method": "POST",
+          "url": "http://localhost:3025/api/v1/bingo/tickets/purchase",
+          "description": "Comprar un cartón de bingo",
+          "body": {
+            "user_id": "string",
+            "carton_id": "number",
+            "amount_payment": "number",
+            "reference_payment": "string",
+            "number_payment": "string"
+          }
+        }
+      }
+    },
+    "users": {
+      "profile": {
+        "method": "GET",
+        "url": "http://localhost:3025/api/v1/users/profile",
+        "description": "Obtener perfil del usuario actual"
+      },
+      "update": {
+        "method": "PATCH",
+        "url": "http://localhost:3025/api/v1/users/profile",
+        "description": "Actualizar perfil del usuario",
+        "body": {
+          "first_name": "string?",
+          "last_name": "string?",
+          "display_name": "string?"
+        }
+      }
+    }
+  },
+  "roles": {
+    "SUPER_ADMIN": "Acceso total a la aplicación",
+    "ADMIN": "Gestión de eventos y usuarios",
+    "CLIENT": "Acceso a eventos y compra de cartones"
+  },
+  "status": {
+    "events": {
+      "DRAFT": "Evento en borrador",
+      "ACTIVE": "Evento activo",
+      "FINISHED": "Evento finalizado",
+      "CANCELLED": "Evento cancelado"
+    },
+    "tickets": {
+      "PROCESSING_SOLD": "Ticket en proceso de pago",
+      "SOLD": "Ticket vendido",
+      "INVALID": "Ticket inválido"
+    },
+    "cartons": {
+      "AVAILABLE": "Cartón disponible",
+      "PROCESSING_SOLD": "Cartón en proceso de venta",
+      "SOLD": "Cartón vendido"
+    }
+  }
+}
